@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../user.entity';
 import { Repository } from 'typeorm';
 import { User } from '../user.interface';
-import { from, map, Observable, switchMap } from 'rxjs';
+import { catchError, from, map, Observable, switchMap, throwError } from 'rxjs';
 import { AuthService } from 'src/services/auth/auth.service';
 
 @Injectable()
@@ -28,6 +28,7 @@ export class UserService {
             const { password, ...result } = user;
             return result;
           }),
+          catchError((err) => throwError(err)),
         );
       }),
     );
